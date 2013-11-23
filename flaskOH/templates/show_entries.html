@@ -12,6 +12,7 @@
         <dd><select name="category" align="center">
             <option value="HW">HW</option>
             <option value="Proj">Proj</option>
+            <option value="Lab">Lab</option>
             <option value="Lec">Lec</option>
             <option value="others">others</option>
         </select></dd>
@@ -19,11 +20,14 @@
       </dl>
     </form>
   {% endif %}
+  <form action="{{ url_for('general_delete_entry') }}">
+    <input type="submit" value="Delete">
+  </form>
   <ul class=entries>
   {% for entry in entries %}
      <li><h2>{{ entry.name }}</h2>{{ entry.description|safe }}  
      <div align="right">{{ entry.category}}</div>
-     <a href="{{ url_for('delete_entry') }}">Delete</a>
+     <a href="{{ url_for('delete_entry', entry_id=entry.id) }}">Delete</a>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em>
   {% endfor %}

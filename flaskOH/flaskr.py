@@ -41,10 +41,10 @@ def connect_db():
 #view
 @app.route('/')
 def show_entries():
-    cur = g.db.execute('select name, description, category from entries order by id\
+    cur = g.db.execute('select name, description, category, id from entries order by id\
             desc')
-    entries = [dict(name = row[0], description = row[1], category = row[2]) for row in
-            cur.fetchall()]
+    entries = [dict(name = row[0], description = row[1], category = row[2], id = row[3]) for row in
+            cur.fetchall()][::-1]
     return render_template('show_entries.html', entries=entries)
 
 @app.route('/add', methods=['POST'])
@@ -59,14 +59,23 @@ def add_entry():
     return redirect(url_for('show_entries'))
 
 @app.route('/delete')
-def delete_entry():
+def general_delete_entry():
     if not session.get('logged_in'):
          abort(401)
-    g.db.execute('delete from entries where id=(select max(id)from entries)') 
+    g.db.execute('delete from entries where id=(select min(id)from entries)') 
     g.db.commit()
     flash('The entry was deleted')
     return redirect(url_for('show_entries'))
 
+@app.route('/delete/<int:entry_id>')
+def delete_entry(entry_id):
+    if not session.get('logged_in'):
+         abort(401)
+    g.db.execute('delete from entries where id=' + str(entry_id))
+    g.db.commit()
+    flash('The entry was deleted')
+    return redirect(url_for('show_entries'))
+                    
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
