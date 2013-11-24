@@ -8,8 +8,8 @@ from contextlib import closing
 DATABASE = '/tmp/flaskr.db'
 DEBUG = True 
 SECRET_KEY = 'development key'
-USERNAME = 'lcq9501'
-PASSWORD = 'Sundae1995'
+USERNAME = 'admin'
+PASSWORD = 'default'
 #g.mode = 'Time'
 globalMode = 'time'
 
