@@ -10,6 +10,8 @@ DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'lcq9501'
 PASSWORD = 'Sundae1995'
+#g.mode = 'Time'
+globalMode = 'time'
 
 #creat the littlelelele application 
 app = Flask(__name__)
@@ -41,10 +43,18 @@ def connect_db():
 #view
 @app.route('/')
 def show_entries():
+    def sort_cat(entries):
+        for i in range(len(entries)):
+            for j in range(i + 1, len(entries)):
+                if entries[i]["category"]< entries[j]["category"]:
+                    entries[i], entries[j] = entries[j], entries[i]
+        return entries
     cur = g.db.execute('select name, description, category, id from entries order by id\
             desc')
     entries = [dict(name = row[0], description = row[1], category = row[2], id = row[3]) for row in
             cur.fetchall()][::-1]
+    if globalMode == "category":
+        entries = sort_cat(entries)
     return render_template('show_entries.html', entries=entries)
 
 @app.route('/add', methods=['POST'])
@@ -89,6 +99,12 @@ def login():
             flash('You were logged in')
             return redirect(url_for('show_entries'))
     return render_template('login.html', error=error)
+
+@app.route('/changemode/<mode>')
+def changemode(mode):
+    global globalMode
+    globalMode = mode
+    return redirect(url_for('show_entries'))
 
 @app.route('/logout')
 def logout():
