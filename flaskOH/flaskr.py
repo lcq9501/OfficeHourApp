@@ -41,14 +41,16 @@ def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
 #view
+def sort_cat(entries):
+    """A helper function to sort the entries according to category"""
+    for i in range(len(entries)):
+        for j in range(i + 1, len(entries)):
+            if entries[i]["category"]< entries[j]["category"]:
+                entries[i], entries[j] = entries[j], entries[i]
+    return entries
+
 @app.route('/')
 def show_entries():
-    def sort_cat(entries):
-        for i in range(len(entries)):
-            for j in range(i + 1, len(entries)):
-                if entries[i]["category"]< entries[j]["category"]:
-                    entries[i], entries[j] = entries[j], entries[i]
-        return entries
     cur = g.db.execute('select name, description, category, id from entries order by id\
             desc')
     entries = [dict(name = row[0], description = row[1], category = row[2], id = row[3]) for row in
@@ -56,6 +58,16 @@ def show_entries():
     if globalMode == "category":
         entries = sort_cat(entries)
     return render_template('show_entries.html', entries=entries)
+
+@app.route('/entries')
+def entries():
+    cur = g.db.execute('select name, description, category, id from entries order by id\
+            desc')
+    entries = [dict(name = row[0], description = row[1], category = row[2], id = row[3]) for row in
+            cur.fetchall()][::-1]
+    if globalMode == "category":
+        entries = sort_cat(entries)
+    return render_template('entries.html', entries=entries)
 
 @app.route('/add', methods=['POST'])
 def add_entry():
