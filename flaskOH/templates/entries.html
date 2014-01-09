@@ -1,5 +1,4 @@
 <!-- The reason why I create this new view is because .load() function in layout.html will load the whole webpage in the entries section if I use the old, complete view of show_entries.html -->
-<ul class=entries>
 {% for entry in entries %}
    <li><h2>{{ entry.name }}</h2>{{ entry.description|safe }}  
    <div align="right">{{ entry.category}}</div>
@@ -9,4 +8,3 @@
 {% else %}
   <li><em>Unbelievable.  No entries here so far</em>
 {% endfor %}
-</ul>

@@ -97,7 +97,15 @@ def delete_entry(entry_id):
     g.db.commit()
     flash('The entry was deleted')
     return redirect(url_for('show_entries'))
-                    
+
+# @app.route('/reorder', methods=['POST'])
+# def reorder_entry():
+#     if not session.get('logged_in'):
+#         abort(401)
+#     print request.form['id']
+#     return redirect(url_for('show_entries'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None

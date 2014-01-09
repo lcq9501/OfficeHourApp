@@ -28,7 +28,7 @@
     </p>
   {% endif %}
   <ul class=entries>
-  {% for entry in entries %}
+  <!-- {% for entry in entries %}
      <li><h2>{{ entry.name }}</h2>{{ entry.description|safe }}  
      <div align="right">{{ entry.category}}</div>
      {% if session.logged_in %}
@@ -37,5 +37,6 @@
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em>
   {% endfor %}
-  </ul>
+   -->
+ </ul>
 {% endblock %}
