@@ -10,11 +10,11 @@
         <dt>Category
         <!-- <dd><input type=text size=20 name=category> -->
         <dd><select name="category" align="center">
-            <option value="HW">HW</option>
-            <option value="Proj">Proj</option>
+            <option value="Homework">Homework</option>
+            <option value="Project">Project</option>
             <option value="Lab">Lab</option>
-            <option value="Lec">Lec</option>
-            <option value="others">others</option>
+            <option value="Discussion">Discussion</option>
+            <option value="Others">Others</option>
         </select></dd>
         <dd><input type=submit value= "Help me">
       </dl>
@@ -28,15 +28,19 @@
     </p>
   {% endif %}
   <ul class=entries>
-  <!-- {% for entry in entries %}
-     <li><h2>{{ entry.name }}</h2>{{ entry.description|safe }}  
-     <div align="right">{{ entry.category}}</div>
-     {% if session.logged_in %}
-      <a href="{{ url_for('delete_entry', entry_id=entry.id) }}">Delete</a>
+  {% for entry in entries %}
+    <li id={{ entry.id }}>
+      <div>
+      <h2>{{ entry.name }} id={{ entry.id }}</h2>
+      {{ entry.description|safe }}  
+      <div align="right">{{ entry.category}}</div>
+      {% if session.logged_in %}
+        <a href="{{ url_for('delete_entry', entry_id=entry.id) }}">Delete</a>
       {% endif %}
+      </div>
+    </li>
   {% else %}
-    <li><em>Unbelievable.  No entries here so far</em>
+    <li><em>Unbelievable.  No entries here so far</em></li>
   {% endfor %}
-   -->
- </ul>
+  </ul>
 {% endblock %}

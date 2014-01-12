@@ -2,14 +2,43 @@
 <title>OfficehourApp</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <!-- This load ajax jquery from googleapi online -->
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<!--these two js enables the sortable function(the fancy dragging around)-->
 <script>window.jQuery || document.write('<script src="{{
    url_for('static', filename='jquery-1.10.2.js') }}">\x3C/script>') </script>
 <!-- This load ajax jquery from the static folder when we put the downloaded jquery as a backup; \x3C is a substitute for symbol "<" -->
 <script type="text/javascript">
-  $(document).ready(function(){     //When the document is ready
-    setInterval(function(){         //do the following with the set Interval
-     $('.entries').load("{{url_for('entries')}}");//partially reload entries class
-     }, 1000);                      //Time interval = 1000 ms
+  // $(document).ready(function(){     //When the document is ready
+  //   setInterval(function(){         //do the following with the set Interval
+  //    $('.entries').load("{{url_for('show_entries')}}");//partially reload entries class
+  //    }, 1000);                      //Time interval = 1000 ms
+  // });
+  $(document).ready(function(){
+    $('.entries').sortable({
+      axis: 'y',
+      stop: function (event, ui) {
+        //var data = $(this).sortable('serialize');
+        var data = $(this).sortable('toArray');
+        console.log(data);
+        $.ajax({
+          url: "{{url_for('reorder_entry')}}",
+          contentType: 'application/json;charset=UTF-8',
+          data: JSON.stringify(data, null, '\t'), 
+          type: "POST",
+          success: function(){console.log("success");}
+        });
+        // $.ajax({
+        //   url: "{{url_for('reorder_entry')}}",
+        //   data: data, 
+        //   type: "POST",
+        //   success: function(result){console.log(result);}
+        // });
+
+        // $.post("{{url_for('reorder_entry')}}",data,function(){
+        //   console.log('Success!')});
+      }
+    });
   });
 </script>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
